@@ -1,6 +1,6 @@
-package com.fube.clientes.controladores;
+package com.tiendaonline.clientes.controladores;
 
-import com.fube.clientes.servicios.InventarioServicioImpl;
+import com.tiendaonline.clientes.servicios.InventarioServicioImpl;
 import org.springframework.web.bind.annotation.*;
 
 

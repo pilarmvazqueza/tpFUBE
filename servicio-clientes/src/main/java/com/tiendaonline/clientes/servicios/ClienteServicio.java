@@ -1,7 +1,7 @@
-package com.fube.clientes.servicios;
+package com.tiendaonline.clientes.servicios;
 
-import com.fube.clientes.dto.ClienteDTO;
-import com.fube.clientes.modelos.Cliente;
+import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.clases.Cliente;
 
 import java.util.List;
 

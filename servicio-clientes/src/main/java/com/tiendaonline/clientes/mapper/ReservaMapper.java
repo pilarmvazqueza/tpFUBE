@@ -1,7 +1,7 @@
-package com.fube.clientes.mapper;
+package com.tiendaonline.clientes.mapper;
 
-import com.fube.clientes.dto.ReservaDTO;
-import com.fube.clientes.modelos.Reserva;
+import com.tiendaonline.clientes.dto.ReservaDTO;
+import com.tiendaonline.clientes.clases.Reserva;
 
 public class ReservaMapper {
     public static ReservaDTO toDTO(Reserva reserva) {

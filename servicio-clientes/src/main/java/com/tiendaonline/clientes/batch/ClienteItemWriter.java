@@ -1,7 +1,7 @@
-package com.fube.clientes.batch;
+package com.tiendaonline.clientes.batch;
 
-import com.fube.clientes.modelos.Cliente;
-import com.fube.clientes.repositorio.ClienteRepositorio;
+import com.tiendaonline.clientes.clases.Cliente;
+import com.tiendaonline.clientes.repositorio.ClienteRepositorio;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;

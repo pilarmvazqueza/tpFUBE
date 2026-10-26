@@ -1,6 +1,6 @@
-package com.fube.clientes.batch;
+package com.tiendaonline.clientes.batch;
 
-import com.fube.clientes.modelos.Cliente;
+import com.tiendaonline.clientes.clases.Cliente;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;

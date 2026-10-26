@@ -1,6 +1,6 @@
-package com.fube.clientes.repositorio;
+package com.tiendaonline.clientes.repositorio;
 
-import com.fube.clientes.modelos.Cliente;
+import com.tiendaonline.clientes.clases.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

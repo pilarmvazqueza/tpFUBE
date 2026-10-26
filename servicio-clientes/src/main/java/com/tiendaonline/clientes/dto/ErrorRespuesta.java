@@ -1,4 +1,4 @@
-package com.fube.clientes.dto;
+package com.tiendaonline.clientes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

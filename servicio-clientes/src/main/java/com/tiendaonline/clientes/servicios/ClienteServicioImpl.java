@@ -1,10 +1,10 @@
-package com.fube.clientes.servicios;
+package com.tiendaonline.clientes.servicios;
 
-import com.fube.clientes.dto.ClienteDTO;
-import com.fube.clientes.excepciones.ClienteNoEncontradoException;
-import com.fube.clientes.mapper.ClienteMapper;
-import com.fube.clientes.modelos.Cliente;
-import com.fube.clientes.repositorio.ClienteRepositorio;
+import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.excepciones.ClienteNoEncontradoException;
+import com.tiendaonline.clientes.mapper.ClienteMapper;
+import com.tiendaonline.clientes.clases.Cliente;
+import com.tiendaonline.clientes.repositorio.ClienteRepositorio;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

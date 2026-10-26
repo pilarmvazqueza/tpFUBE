@@ -1,7 +1,7 @@
-package com.fube.clientes.mapper;
+package com.tiendaonline.clientes.mapper;
 
-import com.fube.clientes.dto.ClienteDTO;
-import com.fube.clientes.modelos.Cliente;
+import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.clases.Cliente;
 
 public class ClienteMapper {
 

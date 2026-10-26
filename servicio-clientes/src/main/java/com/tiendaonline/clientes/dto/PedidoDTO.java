@@ -1,6 +1,6 @@
-package com.fube.clientes.dto;
+package com.tiendaonline.clientes.dto;
 
-import com.fube.clientes.modelos.EstadoPedido;
+import com.tiendaonline.clientes.clases.EstadoPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

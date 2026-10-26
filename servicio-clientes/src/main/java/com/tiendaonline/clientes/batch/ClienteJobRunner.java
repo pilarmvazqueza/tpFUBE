@@ -1,4 +1,4 @@
-package com.fube.clientes.batch;
+package com.tiendaonline.clientes.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
