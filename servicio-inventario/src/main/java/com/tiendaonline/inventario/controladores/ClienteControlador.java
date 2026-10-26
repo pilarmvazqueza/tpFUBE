@@ -1,8 +1,8 @@
-package com.fube.clientes.controladores;
+package com.tiendaonline.inventario.controladores;
 
-import com.fube.clientes.dto.ClienteDTO;
-import com.fube.clientes.mapper.ClienteMapper;
-import com.fube.clientes.servicios.ClienteServicio;
+import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.mapper.ClienteMapper;
+import com.tiendaonline.clientes.servicios.ClienteServicio;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 

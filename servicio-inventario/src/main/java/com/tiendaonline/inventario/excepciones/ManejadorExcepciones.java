@@ -1,6 +1,6 @@
-package com.fube.clientes.excepciones;
+package com.tiendaonline.inventario.excepciones;
 
-import com.fube.clientes.dto.ErrorRespuesta;
+import com.tiendaonline.clientes.dto.ErrorRespuesta;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

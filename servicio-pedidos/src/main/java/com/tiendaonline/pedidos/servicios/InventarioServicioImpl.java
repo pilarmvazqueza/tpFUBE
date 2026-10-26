@@ -1,11 +1,11 @@
-package com.fube.clientes.servicios;
+package com.tiendaonline.pedidos.servicios;
 
 
-import com.fube.clientes.dto.ProductoDTO;
-import com.fube.clientes.excepciones.ProductoNoEncontradoExcepcion;
-import com.fube.clientes.mapper.ProductoMapper;
-import com.fube.clientes.modelos.Producto;
-import com.fube.clientes.repositorio.ProductoRepositorio;
+import com.tiendaonline.clientes.dto.ProductoDTO;
+import com.tiendaonline.clientes.excepciones.ProductoNoEncontradoExcepcion;
+import com.tiendaonline.clientes.mapper.ProductoMapper;
+import com.tiendaonline.clientes.clases.Producto;
+import com.tiendaonline.clientes.repositorio.ProductoRepositorio;
 import org.springframework.stereotype.Service;
 
 @Service

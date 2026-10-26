@@ -1,6 +1,6 @@
-package com.fube.clientes.batch;
+package com.tiendaonline.inventario.batch;
 
-import com.fube.clientes.modelos.Cliente;
+import com.tiendaonline.clientes.clases.Cliente;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;

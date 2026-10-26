@@ -1,4 +1,4 @@
-package com.fube.clientes.excepciones;
+package com.tiendaonline.pedidos.excepciones;
 
 public class ReservaNoEncontradaExcepcion extends RuntimeException {
     public ReservaNoEncontradaExcepcion(Long Id) {

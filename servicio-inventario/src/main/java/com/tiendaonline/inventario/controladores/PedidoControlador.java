@@ -1,7 +1,7 @@
-package com.fube.clientes.controladores;
+package com.tiendaonline.inventario.controladores;
 
-import com.fube.clientes.dto.PedidoDTO;
-import com.fube.clientes.servicios.PedidoServicio;
+import com.tiendaonline.clientes.dto.PedidoDTO;
+import com.tiendaonline.clientes.servicios.PedidoServicio;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()

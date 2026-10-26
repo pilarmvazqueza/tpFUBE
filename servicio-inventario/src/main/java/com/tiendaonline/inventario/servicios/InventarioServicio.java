@@ -1,6 +1,6 @@
-package com.fube.clientes.servicios;
+package com.tiendaonline.inventario.servicios;
 
-import com.fube.clientes.dto.ProductoDTO;
+import com.tiendaonline.clientes.dto.ProductoDTO;
 
 public interface InventarioServicio {
 

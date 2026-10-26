@@ -1,4 +1,4 @@
-package com.fube.clientes.dto;
+package com.tiendaonline.inventario.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

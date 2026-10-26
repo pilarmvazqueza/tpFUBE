@@ -1,4 +1,4 @@
-package com.fube.clientes.modelos;
+package com.tiendaonline.inventario.clases;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

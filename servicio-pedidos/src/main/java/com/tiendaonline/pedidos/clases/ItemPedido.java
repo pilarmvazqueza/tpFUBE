@@ -1,4 +1,4 @@
-package com.fube.clientes.modelos;
+package com.tiendaonline.pedidos.clases;
 
 import jakarta.persistence.*;
 

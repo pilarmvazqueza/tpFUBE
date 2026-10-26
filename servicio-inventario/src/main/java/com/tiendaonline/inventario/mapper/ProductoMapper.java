@@ -1,7 +1,7 @@
-package com.fube.clientes.mapper;
+package com.tiendaonline.inventario.mapper;
 
-import com.fube.clientes.dto.ProductoDTO;
-import com.fube.clientes.modelos.Producto;
+import com.tiendaonline.clientes.dto.ProductoDTO;
+import com.tiendaonline.clientes.clases.Producto;
 
 public class ProductoMapper {
     public static ProductoDTO toDTO(Producto producto) {
