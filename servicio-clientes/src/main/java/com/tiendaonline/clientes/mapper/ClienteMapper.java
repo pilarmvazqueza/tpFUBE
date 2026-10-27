@@ -10,10 +10,7 @@ public class ClienteMapper {
         return ClienteDTO.builder()
                 .id(cliente.getId())
                 .nombre(cliente.getNombre())
-                .apellido(cliente.getApellido())
                 .email(cliente.getEmail())
-                .telefono(cliente.getTelefono())
-                .direccion(cliente.getDireccion())
                 .fechaAlta(cliente.getFechaAlta())
                 .build();
 
@@ -23,10 +20,8 @@ public class ClienteMapper {
         return Cliente.builder()
                 .id(dto.getId())
                 .nombre(dto.getNombre())
-                .apellido(dto.getApellido())
                 .email(dto.getEmail())
-                .telefono(dto.getTelefono())
-                .direccion(dto.getDireccion())
+                .fechaAlta(dto.getFechaAlta())
                 .build();
     }
 }

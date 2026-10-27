@@ -23,17 +23,8 @@ public class Cliente {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
-    private String apellido;
-
     @Column(nullable = false, unique = true)
     private String email;
-
-    @Column
-    private String telefono;
-
-    @Column
-    private String direccion;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaAlta;
