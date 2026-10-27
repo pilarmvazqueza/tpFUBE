@@ -1,19 +1,15 @@
 package com.tiendaonline.inventario.controladores;
 
-import com.tiendaonline.clientes.servicios.InventarioServicioImpl;
+import com.tiendaonline.inventario.servicios.InventarioServicio;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController()
-@RequestMapping("/api/inventario")
+@RequestMapping("/api/v1/inventario")
 public class InventarioControlador {
 
-    private final InventarioServicioImpl servicio;
+    private final InventarioServicio servicio;
 
-
-    public InventarioControlador(InventarioServicioImpl servicio) {
+    public InventarioControlador(InventarioServicio servicio) {
         this.servicio = servicio;
     }
-
-
 }

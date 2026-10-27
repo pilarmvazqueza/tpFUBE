@@ -1,13 +1,11 @@
 package com.tiendaonline.pedidos.mapper;
 
-
-import com.tiendaonline.clientes.dto.PedidoDTO;
-import com.tiendaonline.clientes.clases.Pedido;
+import com.tiendaonline.pedidos.clases.Pedido;
+import com.tiendaonline.pedidos.dto.PedidoDTO;
 
 public class PedidoMapper {
 
     public static PedidoDTO toDTO(Pedido pedido) {
-
         return PedidoDTO.builder()
                 .id(pedido.getId())
                 .clienteId(pedido.getClienteId())
@@ -16,7 +14,6 @@ public class PedidoMapper {
                 .fechaCreacion(pedido.getFechaCreacion())
                 .fechaActualizacion(pedido.getFechaActualizacion())
                 .build();
-
     }
 
     public static Pedido toEntity(PedidoDTO pedidoDTO) {

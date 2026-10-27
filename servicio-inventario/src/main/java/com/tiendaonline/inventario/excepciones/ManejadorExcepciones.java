@@ -1,6 +1,6 @@
 package com.tiendaonline.inventario.excepciones;
 
-import com.tiendaonline.clientes.dto.ErrorRespuesta;
+import com.tiendaonline.inventario.dto.ErrorRespuesta;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,18 +16,17 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.time.LocalDateTime;
 import java.util.List;
 
-// ¿@Slf4j que es?
-/*
-Es una anotación de Lombok que genera en la clase un private static final Logger log de SLF4J.
-Es lo que te permite escribir log.error(...) sin declarar el logger a mano.
- */
-
 @Slf4j
 @RestControllerAdvice
 public class ManejadorExcepciones {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorRespuesta> manejarClienteNoEncontrado(ClienteNoEncontradoException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorRespuesta> manejarProductoNoEncontrado(ProductoNoEncontradoExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(), List.of(), request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarReservaNoEncontrada(ReservaNoEncontradaExcepcion ex, HttpServletRequest request) {
         return construirErrorRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(), List.of(), request);
     }
 
@@ -48,7 +47,7 @@ public class ManejadorExcepciones {
 
     @ExceptionHandler
     public ResponseEntity<ErrorRespuesta> manejarDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
-        return construirErrorRespuesta(HttpStatus.CONFLICT, "Ya existe un cliente con ese email", List.of(), request);
+        return construirErrorRespuesta(HttpStatus.CONFLICT, "La operación viola una restricción de integridad de datos", List.of(), request);
     }
 
     @ExceptionHandler
@@ -82,11 +81,9 @@ public class ManejadorExcepciones {
         return new ResponseEntity<>(errorRespuesta, status);
     }
 
-    private List<String> detallesArgumentosInvalidos(MethodArgumentNotValidException ex){
-        List<String> detalles = ex.getBindingResult().getFieldErrors().stream()
+    private List<String> detallesArgumentosInvalidos(MethodArgumentNotValidException ex) {
+        return ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .toList();
-        return detalles;
     }
-
 }

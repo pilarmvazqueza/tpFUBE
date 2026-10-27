@@ -1,7 +1,8 @@
 package com.tiendaonline.pedidos.servicios;
 
-import com.tiendaonline.clientes.dto.PedidoDTO;
+import com.tiendaonline.pedidos.dto.PedidoDTO;
 
 public interface PedidoServicio {
-    PedidoDTO buscarPorId (Long Id);
+
+    PedidoDTO buscarPorId(Long id);
 }

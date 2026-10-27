@@ -1,6 +1,6 @@
 CREATE TABLE pedidos (
-    id                    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    cliente_id            UUID NOT NULL,
+    id                    BIGSERIAL PRIMARY KEY,
+    cliente_id            BIGINT NOT NULL,
     estado                VARCHAR(20) NOT NULL CHECK (estado IN ('CREADO', 'CONFIRMADO', 'CANCELADO', 'EXPIRADO')),
     monto_total           NUMERIC(12, 2) NOT NULL DEFAULT 0,
     fecha_creacion        TIMESTAMP NOT NULL DEFAULT now(),
@@ -8,9 +8,9 @@ CREATE TABLE pedidos (
 );
 
 CREATE TABLE items_pedido (
-    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    pedido_id         UUID NOT NULL REFERENCES pedidos(id),
-    producto_id       UUID NOT NULL,
+    id                BIGSERIAL PRIMARY KEY,
+    pedido_id         BIGINT NOT NULL REFERENCES pedidos(id),
+    producto_id       BIGINT NOT NULL,
     cantidad          INTEGER NOT NULL CHECK (cantidad > 0),
     precio_unitario   NUMERIC(12, 2) NOT NULL
 );

@@ -1,17 +1,16 @@
 package com.tiendaonline.inventario.mapper;
 
-import com.tiendaonline.clientes.dto.ProductoDTO;
-import com.tiendaonline.clientes.clases.Producto;
+import com.tiendaonline.inventario.clases.Producto;
+import com.tiendaonline.inventario.dto.ProductoDTO;
 
 public class ProductoMapper {
-    public static ProductoDTO toDTO(Producto producto) {
 
+    public static ProductoDTO toDTO(Producto producto) {
         return ProductoDTO.builder()
                 .id(producto.getId())
                 .nombre(producto.getNombre())
                 .cantidadDisponible(producto.getCantidadDisponible())
                 .build();
-
     }
 
     public static Producto toEntity(ProductoDTO productoDTO) {

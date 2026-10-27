@@ -1,11 +1,8 @@
 package com.tiendaonline.inventario.servicios;
 
-
-import com.tiendaonline.clientes.dto.ProductoDTO;
-import com.tiendaonline.clientes.excepciones.ProductoNoEncontradoExcepcion;
-import com.tiendaonline.clientes.mapper.ProductoMapper;
-import com.tiendaonline.clientes.clases.Producto;
-import com.tiendaonline.clientes.repositorio.ProductoRepositorio;
+import com.tiendaonline.inventario.clases.Producto;
+import com.tiendaonline.inventario.excepciones.ProductoNoEncontradoExcepcion;
+import com.tiendaonline.inventario.repositorio.ProductoRepositorio;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,13 +15,9 @@ public class InventarioServicioImpl implements InventarioServicio {
     }
 
     @Override
-    public Integer consultarStock(Long Id) {
-        Producto producto = repoProducto.findById(Id)
-                //.map(ProductoMapper::toDTO)
-                .orElseThrow(() -> new ProductoNoEncontradoExcepcion(Id));
-
-        //aca devolvemos el stock del producto
+    public Integer consultarStock(Long id) {
+        Producto producto = repoProducto.findById(id)
+                .orElseThrow(() -> new ProductoNoEncontradoExcepcion(id));
         return producto.getCantidadDisponible();
     }
-
 }

@@ -1,29 +1,24 @@
 package com.tiendaonline.pedidos.servicios;
 
-
-import com.tiendaonline.clientes.dto.PedidoDTO;
-import com.tiendaonline.clientes.excepciones.PedidoNoEncontradoExcepcion;
-import com.tiendaonline.clientes.mapper.ProductoMapper;
-
-import com.tiendaonline.clientes.clases.Producto;
-import com.tiendaonline.clientes.repositorio.ProductoRepositorio;
+import com.tiendaonline.pedidos.dto.PedidoDTO;
+import com.tiendaonline.pedidos.excepciones.PedidoNoEncontradoExcepcion;
+import com.tiendaonline.pedidos.mapper.PedidoMapper;
+import com.tiendaonline.pedidos.repositorio.PedidoRepositorio;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PedidoServicioImpl implements PedidoServicio {
 
-    private final ProductoRepositorio repoPedido;
+    private final PedidoRepositorio repositorio;
 
-    public PedidoServicioImpl(ProductoRepositorio repoPedido) {
-        this.repoPedido = repoPedido;
+    public PedidoServicioImpl(PedidoRepositorio repositorio) {
+        this.repositorio = repositorio;
     }
 
     @Override
-    public PedidoDTO buscarPorId (Long Id) {
-        return repoPedido.findById(Id)
-                .map(ProductoMapper::toDTO)
-                .orElseThrow(() -> new PedidoNoEncontradoExcepcion(Id));
-
+    public PedidoDTO buscarPorId(Long id) {
+        return repositorio.findById(id)
+                .map(PedidoMapper::toDTO)
+                .orElseThrow(() -> new PedidoNoEncontradoExcepcion(id));
     }
-
 }

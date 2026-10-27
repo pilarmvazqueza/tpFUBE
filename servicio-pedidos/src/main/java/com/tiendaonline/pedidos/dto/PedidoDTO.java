@@ -1,12 +1,13 @@
 package com.tiendaonline.pedidos.dto;
 
-import com.tiendaonline.clientes.clases.EstadoPedido;
+import com.tiendaonline.pedidos.clases.EstadoPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -15,66 +16,9 @@ import java.util.Date;
 public class PedidoDTO {
 
     private Long id;
-
-    private Integer clienteId;
-
+    private Long clienteId;
     private EstadoPedido estado;
-
-    private double montoTotal;
-
-    private Date fechaCreacion;
-
-    private Date fechaActualizacion;
-
-
-
-    //getters
-    public Long getId() {
-        return id;
-    }
-
-    public EstadoPedido getEstado() {
-        return estado;
-    }
-
-    public Integer getClienteId() {
-        return clienteId;
-    }
-
-    public double getMontoTotal() {
-        return montoTotal;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public Date getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    //setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setClienteId(Integer clienteId) {
-        this.clienteId = clienteId;
-    }
-
-    public void setEstado(EstadoPedido estado) {
-        this.estado = estado;
-    }
-
-    public void setMontoTotal(double montoTotal) {
-        this.montoTotal = montoTotal;
-    }
-
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public void setFechaActualizacion(Date fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
-    }
+    private BigDecimal montoTotal;
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaActualizacion;
 }

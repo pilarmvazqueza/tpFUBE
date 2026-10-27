@@ -1,13 +1,8 @@
 package com.tiendaonline.pedidos.clases;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "estadoPedidos")
-public class EstadoPedido {
-    String CREADO;
-    String CONFIRMADO;
-    String CANCELADO;
-    String EXPIRADO;
+public enum EstadoPedido {
+    CREADO,
+    CONFIRMADO,
+    CANCELADO,
+    EXPIRADO
 }
