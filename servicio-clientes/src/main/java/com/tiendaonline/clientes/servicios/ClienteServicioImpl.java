@@ -49,6 +49,9 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void eliminar(Long id) {
+        if (!repositorio.existsById(id)) {
+            throw new ClienteNoEncontradoException(id);
+        }
         repositorio.deleteById(id);
     }
 }
