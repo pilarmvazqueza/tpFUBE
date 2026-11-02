@@ -15,7 +15,7 @@ public class ClienteMapperTest {
         LocalDateTime fechaAlta = LocalDateTime.of(2026,10,27,10,30);
         Cliente cliente = Cliente.builder()
                 .id(1L)
-                .nombre("Juan Pérez")
+                .nombre("Juan Perez")
                 .email("juanperez@mail.com")
                 .fechaAlta(fechaAlta)
                 .build();
@@ -33,7 +33,7 @@ public class ClienteMapperTest {
         LocalDateTime fechaAlta = LocalDateTime.of(2026,10,27,10,30);
         ClienteDTO clienteDTO = ClienteDTO.builder()
                 .id(1L)
-                .nombre("Juan Pérez")
+                .nombre("Juan Perez")
                 .email("juanperez@mail.com")
                 .fechaAlta(fechaAlta)
                 .build();
