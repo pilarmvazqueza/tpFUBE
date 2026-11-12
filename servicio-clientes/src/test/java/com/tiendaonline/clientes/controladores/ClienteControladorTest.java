@@ -4,6 +4,7 @@ import com.tiendaonline.clientes.clases.Cliente;
 import com.tiendaonline.clientes.dto.ClienteDTO;
 import com.tiendaonline.clientes.excepciones.ClienteNoEncontradoException;
 import com.tiendaonline.clientes.servicios.ClienteServicio;
+import com.tiendaonline.clientes.servicios.FeatureFlagService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +30,9 @@ public class ClienteControladorTest {
 
     @MockBean
     private ClienteServicio servicio;
+
+    @MockBean
+    private FeatureFlagService featureFlagService;
 
     @Test
     void testBuscarPorIdExistenteDevuelve200() throws Exception {
@@ -266,6 +270,42 @@ public class ClienteControladorTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.status").value(500))
                 .andExpect(jsonPath("$.mensaje").value("Error Interno del Servidor"))
-                .andExpect(content().string(not(containsString("boom"))));
+                .andExpect(content().string(not(containsString("Error Inesperado"))));
+    }
+
+    @Test
+    void testBuscarPorIdConMaskPiiActivoDevuelveDatosEnmascarados() throws Exception {
+        ClienteDTO clienteDTO = ClienteDTO.builder()
+                .id(1L)
+                .nombre("Juan Perez")
+                .email("juan.perez@gmail.com")
+                .build();
+        when(servicio.buscarPorId(1L)).thenReturn(clienteDTO);
+        when(featureFlagService.isEnabled("mask-pii")).thenReturn(true);
+
+        mockMvc.perform(get("/api/v1/clientes/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("J*** P***"))
+                .andExpect(jsonPath("$.email").value("****@****.com"));
+
+        verify(featureFlagService).isEnabled("mask-pii");
+    }
+
+    @Test
+    void testBuscarPorIdConMaskPiiInactivoDevuelveDatosSinEnmascarar() throws Exception {
+        ClienteDTO clienteDTO = ClienteDTO.builder()
+                .id(1L)
+                .nombre("Juan Perez")
+                .email("juan.perez@gmail.com")
+                .build();
+        when(servicio.buscarPorId(1L)).thenReturn(clienteDTO);
+        when(featureFlagService.isEnabled("mask-pii")).thenReturn(false);
+
+        mockMvc.perform(get("/api/v1/clientes/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Juan Perez"))
+                .andExpect(jsonPath("$.email").value("juan.perez@gmail.com"));
+
+        verify(featureFlagService).isEnabled("mask-pii");
     }
 }

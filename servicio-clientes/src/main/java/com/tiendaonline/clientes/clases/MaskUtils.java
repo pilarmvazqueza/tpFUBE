@@ -19,8 +19,8 @@ public final class MaskUtils {
         if (email == null || !email.contains("@")) return email;
         String dominio = email.substring(email.indexOf("@") + 1);
         int punto = dominio.lastIndexOf('.');
-        String tld = punto >= 0 ? dominio.substring(0, punto) : "";
-        return "***@***" + tld;
+        String tld = punto >= 0 ? dominio.substring(punto) : "";
+        return "****@****" + tld;
     }
 
 }

@@ -30,7 +30,6 @@ public class ClienteControlador {
     }
 
 
-
     @PostMapping
     public ResponseEntity<ClienteDTO> crear(@RequestBody @Valid ClienteDTO clienteDTO) {
         return new ResponseEntity<>(servicio.crear(ClienteMapper.toEntity(clienteDTO)), HttpStatus.CREATED);
@@ -43,8 +42,8 @@ public class ClienteControlador {
     if ( featureFlagService.isEnabled ("mask-pii")){
         clienteDTO.setNombre(MaskUtils.maskNombre(clienteDTO.getNombre()));
         clienteDTO.setEmail(MaskUtils.maskEmail(clienteDTO.getEmail()));
-
     }
+
         return new ResponseEntity<>(clienteDTO, HttpStatus.OK);
     }
 
