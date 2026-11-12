@@ -15,6 +15,3 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
-  #agregamos esto para maskear el mail y nombre
-  features:
-      mask-pii: true
