@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
@@ -36,4 +38,9 @@ public class Pedido {
 
     @Column(nullable = false)
     private LocalDateTime fechaActualizacion;
+
+    @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> listaItems = new ArrayList<>();
+
+
 }

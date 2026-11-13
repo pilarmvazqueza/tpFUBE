@@ -32,4 +32,5 @@ public class ItemPedido {
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal precioUnitario;
+
 }
