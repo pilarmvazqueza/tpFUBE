@@ -36,7 +36,7 @@ public class ClienteControlador {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> Id(@PathVariable Long id) {
     ClienteDTO clienteDTO = servicio.buscarPorId(id);
 
     if ( featureFlagService.isEnabled ("mask-pii")){

@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PedidoDTO {
 
-    private Long id;
-    private Long clienteId;
+    private Integer id;
+    private Integer clienteId;
     private EstadoPedido estado;
     private BigDecimal montoTotal;
     private LocalDateTime fechaCreacion;
