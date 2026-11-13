@@ -20,4 +20,9 @@ public class PedidoControlador {
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         return new ResponseEntity<>(servicio.buscarPorId(id), HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<PedidoDTO> crearPedido(@RequestBody PedidoDTO pedidoDTO){
+        return new ResponseEntity<>(servicio.crearPedido(pedidoDTO), HttpStatus.OK);
+    }
 }

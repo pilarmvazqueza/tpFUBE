@@ -1,6 +1,8 @@
 package com.tiendaonline.inventario.servicios;
 
 import com.tiendaonline.inventario.clases.Producto;
+import com.tiendaonline.inventario.clases.Reserva;
+import com.tiendaonline.inventario.dto.ReservaDTO;
 import com.tiendaonline.inventario.excepciones.ProductoNoEncontradoExcepcion;
 import com.tiendaonline.inventario.repositorio.ProductoRepositorio;
 import org.springframework.stereotype.Service;
@@ -20,4 +22,5 @@ public class InventarioServicioImpl implements InventarioServicio {
                 .orElseThrow(() -> new ProductoNoEncontradoExcepcion(id));
         return producto.getCantidadDisponible();
     }
+
 }
