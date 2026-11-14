@@ -1,7 +1,10 @@
 package com.tiendaonline.pedidos.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tiendaonline.pedidos.clases.EstadoPedido;
-import com.tiendaonline.pedidos.clases.ItemPedido;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,12 +20,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoDTO {
+    // Campos asignados por el servidor: solo lectura (se ignoran si llegan en el request)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
 
-    private Integer id;
-    private Integer clienteId;
+    @NotNull private Long clienteId;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private EstadoPedido estado;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private BigDecimal montoTotal;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime fechaCreacion;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime fechaActualizacion;
-    private List<ItemPedidoDTO> listaItemDTO = new ArrayList<>();
+
+    @Valid
+    @NotEmpty
+    @Builder.Default
+    private List<ItemPedidoDTO> items = new ArrayList<>();
 }

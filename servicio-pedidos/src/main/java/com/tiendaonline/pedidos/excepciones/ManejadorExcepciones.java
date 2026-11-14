@@ -64,6 +64,26 @@ public class ManejadorExcepciones {
         return construirErrorRespuesta(status, mensaje, List.of(), request);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarClienteNoEncontrado(ClienteNoEncontradoExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(), List.of(), request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarServicioNoDisponible(ServicioNoDisponibleExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), List.of(), request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarStockInsuficiente(StockInsuficienteExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.CONFLICT, ex.getMessage(), ex.getDetalles(), request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarProductoNoEncontrado(ProductoNoEncontradoExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(), List.of(), request);
+    }
+
     private ResponseEntity<ErrorRespuesta> construirErrorRespuesta(HttpStatus status, String mensaje, List<String> detalles, HttpServletRequest request) {
         ErrorRespuesta errorRespuesta = ErrorRespuesta.builder()
                 .timestamp(LocalDateTime.now())

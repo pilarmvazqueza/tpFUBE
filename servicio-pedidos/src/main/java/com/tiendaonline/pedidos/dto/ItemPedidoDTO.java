@@ -1,19 +1,23 @@
 package com.tiendaonline.pedidos.dto;
 
-import com.tiendaonline.pedidos.clases.Pedido;
-import jakarta.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-public class ItemPedidoDTO
-{
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ItemPedidoDTO{
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
-    private Pedido pedido;
-    private Long productoId;
-    private Integer cantidad;
-    private BigDecimal precioUnitario;
-
-
-
+    @NotNull private Long productoId;
+    @NotNull @Min(1) private Integer cantidad;
+    @NotNull @Positive private BigDecimal precioUnitario;
 }

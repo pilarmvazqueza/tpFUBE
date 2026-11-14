@@ -36,7 +36,7 @@ public class ClienteControlador {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> Id(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> id(@PathVariable Long id) {
     ClienteDTO clienteDTO = servicio.buscarPorId(id);
 
     if ( featureFlagService.isEnabled ("mask-pii")){
@@ -48,13 +48,12 @@ public class ClienteControlador {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> buscarTodos() {
-
+    public ResponseEntity<List<ClienteDTO>> Todos() {
         return new ResponseEntity<>(servicio.buscarTodos(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> actualizar(@PathVariable Long id, @RequestBody @Valid ClienteDTO clienteDTO) {
+    public ResponseEntity<ClienteDTO> Id(@PathVariable Long id, @RequestBody @Valid ClienteDTO clienteDTO) {
         clienteDTO.setId(id);
         return new ResponseEntity<>(servicio.actualizar(ClienteMapper.toEntity(clienteDTO)), HttpStatus.OK);
     }

@@ -40,6 +40,7 @@ public class Pedido {
     private LocalDateTime fechaActualizacion;
 
     @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<ItemPedido> listaItems = new ArrayList<>();
 
 

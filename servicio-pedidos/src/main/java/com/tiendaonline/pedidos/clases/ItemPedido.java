@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
@@ -22,6 +24,8 @@ public class ItemPedido {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id", nullable = false)
+    @ToString.Exclude            // evita la recursión Pedido <-> ItemPedido
+    @EqualsAndHashCode.Exclude
     private Pedido pedido;
 
     @Column(nullable = false)
