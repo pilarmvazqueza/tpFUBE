@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoDTO {
-    // Campos asignados por el servidor: solo lectura (se ignoran si llegan en el request)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 

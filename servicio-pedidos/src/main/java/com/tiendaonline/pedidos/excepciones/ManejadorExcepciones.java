@@ -80,6 +80,11 @@ public class ManejadorExcepciones {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarPedidoNoCancelable(PedidoNoCancelableExcepcion ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.CONFLICT, ex.getMessage(), List.of(), request);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorRespuesta> manejarProductoNoEncontrado(ProductoNoEncontradoExcepcion ex, HttpServletRequest request) {
         return construirErrorRespuesta(HttpStatus.NOT_FOUND, ex.getMessage(), List.of(), request);
     }

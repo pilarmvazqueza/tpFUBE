@@ -24,7 +24,7 @@ public class ItemPedido {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pedido_id", nullable = false)
-    @ToString.Exclude            // evita la recursión Pedido <-> ItemPedido
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Pedido pedido;
 
