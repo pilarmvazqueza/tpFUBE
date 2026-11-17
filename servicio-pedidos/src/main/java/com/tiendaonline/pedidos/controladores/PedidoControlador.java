@@ -2,6 +2,7 @@ package com.tiendaonline.pedidos.controladores;
 
 import com.tiendaonline.pedidos.dto.PedidoDTO;
 import com.tiendaonline.pedidos.servicios.PedidoServicio;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,5 +20,10 @@ public class PedidoControlador {
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         return new ResponseEntity<>(servicio.buscarPorId(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<PedidoDTO> crear(@Valid @RequestBody PedidoDTO dto) {
+        return new ResponseEntity<>(servicio.crearPedido(dto), HttpStatus.CREATED);
     }
 }
