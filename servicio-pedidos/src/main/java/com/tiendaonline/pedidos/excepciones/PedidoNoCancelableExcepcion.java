@@ -1,0 +1,9 @@
+package com.tiendaonline.pedidos.excepciones;
+
+import com.tiendaonline.pedidos.clases.EstadoPedido;
+
+public class PedidoNoCancelableExcepcion extends RuntimeException {
+    public PedidoNoCancelableExcepcion(Long id, EstadoPedido estado) {
+        super("El pedido " + id + " no se puede cancelar en estado " + estado);
+    }
+}

@@ -6,6 +6,7 @@ import com.tiendaonline.pedidos.dto.ItemReservaDTO;
 import com.tiendaonline.pedidos.integracion.ClientesClient;
 import com.tiendaonline.pedidos.integracion.InventarioClient;
 import com.tiendaonline.pedidos.dto.PedidoDTO;
+import com.tiendaonline.pedidos.excepciones.PedidoNoCancelableExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.mapper.PedidoMapper;
 import com.tiendaonline.pedidos.repositorio.PedidoRepositorio;
@@ -32,10 +33,37 @@ public class PedidoServicioImpl implements PedidoServicio {
 
 
     @Override
+    @Transactional(readOnly = true)
     public PedidoDTO buscarPorId(Long id) {
         return repositorio.findById(id)
                 .map(PedidoMapper::toDTO)
                 .orElseThrow(() -> new PedidoNoEncontradoExcepcion(id));
+    }
+
+    @Override
+    @Transactional
+    public PedidoDTO cancelar(Long id) {
+        Pedido pedido = repositorio.findById(id)
+                .orElseThrow(() -> new PedidoNoEncontradoExcepcion(id));
+
+        if (pedido.getEstado() != EstadoPedido.CREADO && pedido.getEstado() != EstadoPedido.CONFIRMADO) {
+            throw new PedidoNoCancelableExcepcion(id, pedido.getEstado());
+        }
+
+        pedido.setEstado(EstadoPedido.CANCELADO);
+        pedido.setFechaActualizacion(LocalDateTime.now());
+        inventarioClient.liberarPorPedido(id);
+
+        return PedidoMapper.toDTO(pedido);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PedidoDTO> listarPorCliente(Long clienteId) {
+        return repositorio.findByClienteIdOrderByFechaCreacionDesc(clienteId)
+                .stream()
+                .map(PedidoMapper::toDTO)
+                .toList();
     }
 
     @Override
