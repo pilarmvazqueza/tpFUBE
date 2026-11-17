@@ -16,7 +16,7 @@ public class CrearReservasDTO {
 
     @NotNull(message = "El ID del pedido no puede ser nulo")
 
-    private long pedidoId;
+    private Long pedidoId;
 
     @NotEmpty(message = "La lista de ítems no puede estar vacía")
     @Valid
