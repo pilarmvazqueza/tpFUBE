@@ -7,6 +7,7 @@ import com.tiendaonline.pedidos.integracion.ClientesClient;
 import com.tiendaonline.pedidos.integracion.InventarioClient;
 import com.tiendaonline.pedidos.dto.PedidoDTO;
 import com.tiendaonline.pedidos.excepciones.PedidoNoCancelableExcepcion;
+import com.tiendaonline.pedidos.excepciones.PedidoNoConfirmableExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.mapper.PedidoMapper;
 import com.tiendaonline.pedidos.repositorio.PedidoRepositorio;
@@ -53,6 +54,22 @@ public class PedidoServicioImpl implements PedidoServicio {
         pedido.setEstado(EstadoPedido.CANCELADO);
         pedido.setFechaActualizacion(LocalDateTime.now());
         inventarioClient.liberarPorPedido(id);
+
+        return PedidoMapper.toDTO(pedido);
+    }
+
+    @Override
+    @Transactional
+    public PedidoDTO confirmar(Long id) {
+        Pedido pedido = repositorio.findById(id)
+                .orElseThrow(() -> new PedidoNoEncontradoExcepcion(id));
+
+        if (pedido.getEstado() != EstadoPedido.CREADO) {
+            throw new PedidoNoConfirmableExcepcion(id, pedido.getEstado());
+        }
+
+        pedido.setEstado(EstadoPedido.CONFIRMADO);
+        pedido.setFechaActualizacion(LocalDateTime.now());
 
         return PedidoMapper.toDTO(pedido);
     }

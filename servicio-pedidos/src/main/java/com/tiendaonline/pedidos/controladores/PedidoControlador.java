@@ -34,6 +34,11 @@ public class PedidoControlador {
         return new ResponseEntity<>(servicio.crearPedido(dto), HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}/confirmacion")
+    public ResponseEntity<PedidoDTO> confirmar(@PathVariable Long id) {
+        return new ResponseEntity<>(servicio.confirmar(id), HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}/cancelacion")
     public ResponseEntity<PedidoDTO> cancelar(@PathVariable Long id) {
         return new ResponseEntity<>(servicio.cancelar(id), HttpStatus.OK);
