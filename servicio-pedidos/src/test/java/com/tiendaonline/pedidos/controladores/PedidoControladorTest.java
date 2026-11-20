@@ -5,6 +5,7 @@ import com.tiendaonline.pedidos.dto.ItemPedidoDTO;
 import com.tiendaonline.pedidos.dto.PedidoDTO;
 import com.tiendaonline.pedidos.excepciones.ClienteNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoCancelableExcepcion;
+import com.tiendaonline.pedidos.excepciones.PedidoNoConfirmableExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.ProductoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.ServicioNoDisponibleExcepcion;
@@ -283,6 +284,43 @@ class PedidoControladorTest {
     @Test
     void testCancelarConIdNoNumericoDevuelve400() throws Exception {
         mockMvc.perform(patch(URL + "/abc/cancelacion"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.mensaje").value("Tipo de argumento inválido: id"));
+    }
+
+    @Test
+    void testConfirmarDevuelve200ConElPedidoConfirmado() throws Exception {
+        PedidoDTO confirmado = armarPedidoCreado();
+        confirmado.setEstado(EstadoPedido.CONFIRMADO);
+        when(servicio.confirmar(10L)).thenReturn(confirmado);
+
+        mockMvc.perform(patch(URL + "/10/confirmacion"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(10))
+                .andExpect(jsonPath("$.estado").value("CONFIRMADO"));
+    }
+
+    @Test
+    void testConfirmarPedidoInexistenteDevuelve404() throws Exception {
+        when(servicio.confirmar(99L)).thenThrow(new PedidoNoEncontradoExcepcion(99L));
+
+        mockMvc.perform(patch(URL + "/99/confirmacion"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensaje").value("Pedido no encontrado con id: 99"));
+    }
+
+    @Test
+    void testConfirmarPedidoNoConfirmableDevuelve409() throws Exception {
+        when(servicio.confirmar(10L)).thenThrow(new PedidoNoConfirmableExcepcion(10L, EstadoPedido.CANCELADO));
+
+        mockMvc.perform(patch(URL + "/10/confirmacion"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").value("El pedido 10 no se puede confirmar en estado CANCELADO"));
+    }
+
+    @Test
+    void testConfirmarConIdNoNumericoDevuelve400() throws Exception {
+        mockMvc.perform(patch(URL + "/abc/confirmacion"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensaje").value("Tipo de argumento inválido: id"));
     }

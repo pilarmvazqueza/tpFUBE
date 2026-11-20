@@ -10,5 +10,6 @@ public interface PedidoServicio {
     PedidoDTO crearPedido(PedidoDTO pedidoDTO);
     List<PedidoDTO> listarPorCliente(Long clienteId);
     PedidoDTO cancelar(Long id);
+    PedidoDTO confirmar(Long id);
 
 }

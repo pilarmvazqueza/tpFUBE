@@ -8,6 +8,7 @@ import com.tiendaonline.pedidos.dto.ItemReservaDTO;
 import com.tiendaonline.pedidos.dto.PedidoDTO;
 import com.tiendaonline.pedidos.excepciones.ClienteNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoCancelableExcepcion;
+import com.tiendaonline.pedidos.excepciones.PedidoNoConfirmableExcepcion;
 import com.tiendaonline.pedidos.excepciones.PedidoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.ProductoNoEncontradoExcepcion;
 import com.tiendaonline.pedidos.excepciones.ServicioNoDisponibleExcepcion;
@@ -297,5 +298,48 @@ class PedidoServicioImplTest {
                 .when(inventarioClient).liberarPorPedido(5L);
 
         assertThrows(ServicioNoDisponibleExcepcion.class, () -> servicio.cancelar(5L));
+    }
+
+    @Test
+    void testConfirmarPedidoCreadoLoPasaAConfirmado() {
+        Pedido pedido = armarPedido(5L, EstadoPedido.CREADO);
+        when(repositorio.findById(5L)).thenReturn(Optional.of(pedido));
+
+        PedidoDTO resultadoObtenido = servicio.confirmar(5L);
+
+        assertEquals(EstadoPedido.CONFIRMADO, resultadoObtenido.getEstado());
+        assertTrue(pedido.getFechaActualizacion().isAfter(pedido.getFechaCreacion()));
+        verifyNoInteractions(inventarioClient);
+    }
+
+    @Test
+    void testConfirmarPedidoYaConfirmadoLanzaPedidoNoConfirmableExcepcion() {
+        when(repositorio.findById(5L)).thenReturn(Optional.of(armarPedido(5L, EstadoPedido.CONFIRMADO)));
+
+        PedidoNoConfirmableExcepcion excepcion = assertThrows(PedidoNoConfirmableExcepcion.class,
+                () -> servicio.confirmar(5L));
+
+        assertEquals("El pedido 5 no se puede confirmar en estado CONFIRMADO", excepcion.getMessage());
+    }
+
+    @Test
+    void testConfirmarPedidoCanceladoLanzaPedidoNoConfirmableExcepcion() {
+        when(repositorio.findById(5L)).thenReturn(Optional.of(armarPedido(5L, EstadoPedido.CANCELADO)));
+
+        assertThrows(PedidoNoConfirmableExcepcion.class, () -> servicio.confirmar(5L));
+    }
+
+    @Test
+    void testConfirmarPedidoExpiradoLanzaPedidoNoConfirmableExcepcion() {
+        when(repositorio.findById(5L)).thenReturn(Optional.of(armarPedido(5L, EstadoPedido.EXPIRADO)));
+
+        assertThrows(PedidoNoConfirmableExcepcion.class, () -> servicio.confirmar(5L));
+    }
+
+    @Test
+    void testConfirmarPedidoInexistenteLanzaPedidoNoEncontradoExcepcion() {
+        when(repositorio.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(PedidoNoEncontradoExcepcion.class, () -> servicio.confirmar(99L));
     }
 }
