@@ -1,0 +1,25 @@
+package com.tiendaonline.pedidos.controladores;
+
+import com.tiendaonline.pedidos.batch.EjecutorExpiracion;
+import com.tiendaonline.pedidos.dto.ResumenExpiracionDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/pedidos/expiraciones")
+public class ExpiracionControlador {
+
+    private final EjecutorExpiracion ejecutor;
+
+    public ExpiracionControlador(EjecutorExpiracion ejecutor) {
+        this.ejecutor = ejecutor;
+    }
+
+    @PostMapping
+    public ResponseEntity<ResumenExpiracionDTO> expirar() {
+        return new ResponseEntity<>(ejecutor.ejecutar(), HttpStatus.CREATED);
+    }
+}

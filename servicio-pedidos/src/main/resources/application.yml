@@ -18,6 +18,11 @@ spring:
   batch:
     job:
       enabled: false
+    jdbc:
+      initialize-schema: never
+pedidos:
+  expiracion:
+    cron: "0 0 2 * * *"
 servicios:
   clientes:
     url: http://localhost:8081/
