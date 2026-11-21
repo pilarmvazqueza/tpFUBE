@@ -95,7 +95,8 @@ class ExpiracionPedidosIntegracionTest {
         ResumenExpiracionDTO resumen = ejecutor.ejecutar();
 
         assertEquals("COMPLETED", resumen.getEstado());
-        assertTrue(resumen.getExpirados() >= 1);
+        assertEquals(1, resumen.getLeidos());
+        assertEquals(1, resumen.getExpirados());
         assertEquals(EstadoPedido.EXPIRADO, estadoActual(vencido.getId()));
         assertEquals(EstadoPedido.CREADO, estadoActual(reciente.getId()));
         assertEquals(EstadoPedido.CONFIRMADO, estadoActual(confirmadoViejo.getId()));
