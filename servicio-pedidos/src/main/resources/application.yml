@@ -23,6 +23,8 @@ spring:
 pedidos:
   expiracion:
     cron: "0 0 2 * * *"
+    #Para probar con 30 segundos el cron de expiración de pedidos
+    #cron: "0/30 * * * * *"
 servicios:
   clientes:
     url: http://localhost:8081/
