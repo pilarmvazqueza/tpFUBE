@@ -1,0 +1,26 @@
+package com.tiendaonline.clientes.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PedidoDTO {
+    private Long id;
+    private Long clienteId;
+    private String estado;
+    private BigDecimal montoTotal;
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaActualizacion;
+    @Builder.Default
+    private List<ItemPedidoDTO> items = new ArrayList<>();
+}

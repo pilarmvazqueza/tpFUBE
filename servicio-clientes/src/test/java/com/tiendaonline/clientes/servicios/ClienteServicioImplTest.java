@@ -2,7 +2,10 @@ package com.tiendaonline.clientes.servicios;
 
 import com.tiendaonline.clientes.clases.Cliente;
 import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.dto.PedidoDTO;
 import com.tiendaonline.clientes.excepciones.ClienteNoEncontradoException;
+import com.tiendaonline.clientes.excepciones.ServicioNoDisponibleException;
+import com.tiendaonline.clientes.integracion.PedidosClient;
 import com.tiendaonline.clientes.repositorio.ClienteRepositorio;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +27,9 @@ public class ClienteServicioImplTest {
 
     @Mock
     private ClienteRepositorio repositorio;
+
+    @Mock
+    private PedidosClient pedidosClient;
 
     @InjectMocks
     private ClienteServicioImpl servicio;
@@ -192,5 +198,51 @@ public class ClienteServicioImplTest {
         );
         assertEquals("Cliente no encontrado con id: 1", excepcion.getMessage());
         verify(repositorio, never()).deleteById(1L);
+    }
+
+    @Test
+    void testListarPedidosDeClienteExistenteDevuelveLosPedidosDeServicioPedidos(){
+        Cliente cliente = Cliente.builder().id(1L).nombre("Juan Perez").email("juan@mail.com").build();
+        List<PedidoDTO> pedidos = List.of(PedidoDTO.builder().id(10L).clienteId(1L).estado("CREADO").build());
+        when(repositorio.findById(1L)).thenReturn(Optional.of(cliente));
+        when(pedidosClient.listarPorCliente(1L)).thenReturn(pedidos);
+
+        List<PedidoDTO> resultado = servicio.listarPedidos(1L);
+
+        assertEquals(pedidos, resultado);
+        verify(pedidosClient).listarPorCliente(1L);
+    }
+
+    @Test
+    void testListarPedidosDeClienteSinPedidosDevuelveListaVacia(){
+        Cliente cliente = Cliente.builder().id(1L).nombre("Juan Perez").email("juan@mail.com").build();
+        when(repositorio.findById(1L)).thenReturn(Optional.of(cliente));
+        when(pedidosClient.listarPorCliente(1L)).thenReturn(List.of());
+
+        List<PedidoDTO> resultado = servicio.listarPedidos(1L);
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testListarPedidosDeClienteInexistenteLanzaExcepcionYNoConsultaAPedidos(){
+        when(repositorio.findById(1L)).thenReturn(Optional.empty());
+
+        ClienteNoEncontradoException excepcion = assertThrows(
+                ClienteNoEncontradoException.class,
+                () -> servicio.listarPedidos(1L)
+        );
+
+        assertEquals("Cliente no encontrado con id: 1", excepcion.getMessage());
+        verifyNoInteractions(pedidosClient);
+    }
+
+    @Test
+    void testListarPedidosPropagaElErrorSiServicioPedidosNoEstaDisponible(){
+        Cliente cliente = Cliente.builder().id(1L).nombre("Juan Perez").email("juan@mail.com").build();
+        when(repositorio.findById(1L)).thenReturn(Optional.of(cliente));
+        when(pedidosClient.listarPorCliente(1L)).thenThrow(new ServicioNoDisponibleException("servicio-pedidos"));
+
+        assertThrows(ServicioNoDisponibleException.class, () -> servicio.listarPedidos(1L));
     }
 }

@@ -32,6 +32,11 @@ public class ManejadorExcepciones {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorRespuesta> manejarServicioNoDisponible(ServicioNoDisponibleException ex, HttpServletRequest request) {
+        return construirErrorRespuesta(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage(), List.of(), request);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorRespuesta> manejarArgumentoNoValido(MethodArgumentNotValidException ex, HttpServletRequest request) {
         return construirErrorRespuesta(HttpStatus.BAD_REQUEST, "Datos inválidos", detallesArgumentosInvalidos(ex), request);
     }

@@ -2,7 +2,10 @@ package com.tiendaonline.clientes.controladores;
 
 import com.tiendaonline.clientes.clases.Cliente;
 import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.dto.ItemPedidoDTO;
+import com.tiendaonline.clientes.dto.PedidoDTO;
 import com.tiendaonline.clientes.excepciones.ClienteNoEncontradoException;
+import com.tiendaonline.clientes.excepciones.ServicioNoDisponibleException;
 import com.tiendaonline.clientes.servicios.ClienteServicio;
 import com.tiendaonline.clientes.servicios.FeatureFlagService;
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -307,5 +311,57 @@ public class ClienteControladorTest {
                 .andExpect(jsonPath("$.email").value("juan.perez@gmail.com"));
 
         verify(featureFlagService).isEnabled("mask-pii");
+    }
+
+    @Test
+    void testPedidosDeClienteExistenteDevuelve200ConLaLista() throws Exception {
+        PedidoDTO pedido = PedidoDTO.builder()
+                .id(10L).clienteId(1L).estado("CREADO")
+                .montoTotal(new BigDecimal("200.00"))
+                .items(List.of(new ItemPedidoDTO(1L, 3L, 2, new BigDecimal("100.00"))))
+                .build();
+        when(servicio.listarPedidos(1L)).thenReturn(List.of(pedido));
+
+        mockMvc.perform(get("/api/v1/clientes/1/pedidos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(10))
+                .andExpect(jsonPath("$[0].estado").value("CREADO"))
+                .andExpect(jsonPath("$[0].items[0].productoId").value(3));
+    }
+
+    @Test
+    void testPedidosDeClienteSinPedidosDevuelve200ConListaVacia() throws Exception {
+        when(servicio.listarPedidos(1L)).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/v1/clientes/1/pedidos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    void testPedidosDeClienteInexistenteDevuelve404() throws Exception {
+        when(servicio.listarPedidos(99L)).thenThrow(new ClienteNoEncontradoException(99L));
+
+        mockMvc.perform(get("/api/v1/clientes/99/pedidos"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.mensaje").value("Cliente no encontrado con id: 99"));
+    }
+
+    @Test
+    void testPedidosConServicioPedidosCaidoDevuelve503() throws Exception {
+        when(servicio.listarPedidos(1L)).thenThrow(new ServicioNoDisponibleException("servicio-pedidos"));
+
+        mockMvc.perform(get("/api/v1/clientes/1/pedidos"))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.status").value(503))
+                .andExpect(jsonPath("$.mensaje").value(containsString("servicio-pedidos")));
+    }
+
+    @Test
+    void testPedidosConIdNoNumericoDevuelve400() throws Exception {
+        mockMvc.perform(get("/api/v1/clientes/abc/pedidos"))
+                .andExpect(status().isBadRequest());
     }
 }

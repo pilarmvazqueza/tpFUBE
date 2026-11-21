@@ -2,6 +2,7 @@ package com.tiendaonline.clientes.controladores;
 
 import com.tiendaonline.clientes.clases.MaskUtils;
 import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.dto.PedidoDTO;
 import com.tiendaonline.clientes.mapper.ClienteMapper;
 import com.tiendaonline.clientes.servicios.ClienteServicio;
 import com.tiendaonline.clientes.servicios.FeatureFlagService;
@@ -45,6 +46,11 @@ public class ClienteControlador {
     }
 
         return new ResponseEntity<>(clienteDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/pedidos")
+    public ResponseEntity<List<PedidoDTO>> pedidos(@PathVariable Long id) {
+        return new ResponseEntity<>(servicio.listarPedidos(id), HttpStatus.OK);
     }
 
     @GetMapping

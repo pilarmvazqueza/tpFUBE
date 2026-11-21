@@ -1,7 +1,9 @@
 package com.tiendaonline.clientes.servicios;
 
 import com.tiendaonline.clientes.dto.ClienteDTO;
+import com.tiendaonline.clientes.dto.PedidoDTO;
 import com.tiendaonline.clientes.excepciones.ClienteNoEncontradoException;
+import com.tiendaonline.clientes.integracion.PedidosClient;
 import com.tiendaonline.clientes.mapper.ClienteMapper;
 import com.tiendaonline.clientes.clases.Cliente;
 import com.tiendaonline.clientes.repositorio.ClienteRepositorio;
@@ -14,9 +16,11 @@ import java.util.List;
 public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepositorio repositorio;
+    private final PedidosClient pedidosClient;
 
-    public ClienteServicioImpl(ClienteRepositorio repositorio) {
+    public ClienteServicioImpl(ClienteRepositorio repositorio, PedidosClient pedidosClient) {
         this.repositorio = repositorio;
+        this.pedidosClient = pedidosClient;
     }
 
     @Override
@@ -53,5 +57,11 @@ public class ClienteServicioImpl implements ClienteServicio {
             throw new ClienteNoEncontradoException(id);
         }
         repositorio.deleteById(id);
+    }
+
+    @Override
+    public List<PedidoDTO> listarPedidos(Long id) {
+        buscarPorId(id);
+        return pedidosClient.listarPorCliente(id);
     }
 }
