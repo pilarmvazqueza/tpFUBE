@@ -2,6 +2,7 @@ package com.tiendaonline.inventario.servicios;
 
 import com.tiendaonline.inventario.excepciones.ProductoNoEncontradoExcepcion;
 import com.tiendaonline.inventario.excepciones.StockInsuficienteExcepcion;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.tiendaonline.inventario.dto.*;
 import com.tiendaonline.inventario.clases.*;
@@ -14,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
+
+
+@Slf4j
 @Service
 public class InventarioServicioImpl implements InventarioServicio {
 
@@ -27,15 +32,30 @@ public class InventarioServicioImpl implements InventarioServicio {
 
     @Override
     public Integer consultarStock(Long id) {
+        log.debug("Consultando stock {}", kv("productoId", id));
+
         Producto producto = repoProducto.findById(id)
-                .orElseThrow(() -> new ProductoNoEncontradoExcepcion(id));
-        return producto.getCantidadDisponible();
+                .orElseThrow(() -> {
+                    log.warn("Producto no encontrado {}", kv("productoId", id));
+                    return new ProductoNoEncontradoExcepcion(id);
+                });
+
+        Integer stock = producto.getCantidadDisponible();
+        log.info("Stock consultado {}",
+                kv("productoId", id),
+                kv("cantidadDisponible", stock));
+
+        return stock;
     }
 
     @Override 
     @Transactional 
     public List<ReservaDTO> reservar(CrearReservasDTO solicitud) {
-        
+
+        log.info("Iniciando reserva de stock {}",
+                kv("pedidoId", solicitud.getPedidoId()));
+
+
         // 1. Agrupar ítems repetidos y sumar sus cantidades para evitar el bug del stock duplicado
         Map<Long, Integer> cantidadesRequeridas = solicitud.getItems().stream()
                 .collect(Collectors.groupingBy(ItemReservaDTO::getProductoId, 
@@ -51,11 +71,21 @@ public class InventarioServicioImpl implements InventarioServicio {
             Integer cantidadNecesaria = entry.getValue();
 
             Producto producto = repoProducto.findById(productoId)
-                    .orElseThrow(() -> new ProductoNoEncontradoExcepcion(productoId));
+                    .orElseThrow(() -> {
+                        log.warn("Producto no encontrado durante la reserva {}",
+                                kv("productoId", productoId));
+                        return new ProductoNoEncontradoExcepcion(productoId);
+                    });
 
             if (producto.getCantidadDisponible() < cantidadNecesaria) {
                 erroresStock.add("Producto ID " + productoId + " sin stock. Requerido: " + 
                         cantidadNecesaria + ", Disponible: " + producto.getCantidadDisponible());
+
+                log.warn("Stock insuficiente {} {} {}",
+                        kv("productoId", productoId),
+                        kv("cantidadRequerida", cantidadNecesaria),
+                        kv("cantidadDisponible", producto.getCantidadDisponible()));
+
             } else {
                 productosAActualizar.add(producto);
                 reservasACrear.add(Reserva.builder()
@@ -69,6 +99,10 @@ public class InventarioServicioImpl implements InventarioServicio {
 
         // 3. Si hay errores, se corta la ejecución lanzando la excepción con todos los detalles
         if (!erroresStock.isEmpty()) {
+            log.warn("No se pudo completar la reserva {} {}",
+                    kv("pedidoId", solicitud.getPedidoId()),
+                    kv("cantidadProductosSinStock", erroresStock.size()));
+
             throw new StockInsuficienteExcepcion(erroresStock);
         }
 
@@ -86,12 +120,18 @@ public class InventarioServicioImpl implements InventarioServicio {
             reservasConfirmadas.add(ReservaMapper.toDTO(reservaGuardada));
         }
 
+        log.info("Reservas creadas correctamente {} {}",
+                kv("pedidoId", solicitud.getPedidoId()),
+                kv("cantidadReservas", reservasConfirmadas.size()));
+
         return reservasConfirmadas;
     }
 
     @Override
     @Transactional
     public void liberarPorPedido(Long pedidoId) {
+        log.info("Iniciando liberación de reservas {}", kv("pedidoId", pedidoId));
+
         // Diseño idempotente: solo buscar reservas ACTIVAS
         List<Reserva> reservas = repoReserva.findByPedidoIdAndEstado(pedidoId, EstadoReserva.ACTIVA);
         
@@ -101,5 +141,8 @@ public class InventarioServicioImpl implements InventarioServicio {
             producto.setCantidadDisponible(producto.getCantidadDisponible() + reserva.getCantidad());
             // JPA guarda automáticamente el estado y la cantidad en DB al hacer commit de la transacción
         }
+        log.info("Reservas liberadas {} {}",
+                kv("pedidoId", pedidoId),
+                kv("cantidadReservasLiberadas", reservas.size()));
     }
 }
