@@ -1,37 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <springProperty scope="context" name="servicio-clientes" source="spring.application.name"/>
-    <property name="CONSOLE_LOG_PATTERN"
-              value="%d{HH:mm:ss.SSS} %-5level [${servicio-clientes},%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"/>
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-    <appender name="FILE_JSON" class="ch.qos.logback.core.FileAppender">
-        <file>logs/${servicio-clientes}.json</file>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+
+    <springProperty name="APP_NAME"
+                    source="spring.application.name"
+                    defaultValue="servicio-clientes"/>
+
+    <springProperty name="LOKI_URL"
+                    source="logging.loki.url"
+                    defaultValue="http://localhost:3100/loki/api/v1/push"/>
+
+
+    <!-- Consola -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) [%X{traceId:-},%X{spanId:-}] %cyan(%logger{30}) - %msg%n</pattern>
+        </encoder>
     </appender>
 
-    <springProfile name="loki">
-        <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-            <http>
-                <url>http://localhost:3100/loki/api/v1/push</url>
-            </http>
-            <format>
-                <label>
-                    <!--aca va el HOSTNAME es el id del contenedor de docker.-->
-                    <pattern>app=${servicio-clientes},host=${HOSTNAME},level=%level</pattern>
-                </label>
-                <message class="com.github.loki4j.logback.JsonLayout"/>
-            </format>
-        </appender>
-    </springProfile>
+    <!-- Archivo: JSON -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/servicio-clientes.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/servicio-clientes-%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app":"${APP_NAME}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Loki -->
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://localhost:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <!--aca va el HOSTNAME es el id del contenedor de docker.-->
+                <pattern>app=${APP_NAME},host=${HOSTNAME},level=%level</pattern>
+            </label>
+            <message class="net.logstash.logback.layout.LogstashLayout"/>
+        </format>
+    </appender>
+
+    <logger name="com.tiendaonline.clientes" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE_JSON"/>
+        <appender-ref ref="JSON_FILE"/>
     </root>
 
     <springProfile name="loki">
-        <root level="INFO">
+        <root>
             <appender-ref ref="LOKI"/>
         </root>
     </springProfile>

@@ -39,4 +39,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,prometheus
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            request: true
