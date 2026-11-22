@@ -1,8 +1,18 @@
 global:
-  scrape_interval: 30s
+  scrape_interval: 5s
 
 scrape_configs:
-  - job_name: clientes
-    metrics_path: /actuador/prometheus
+  - job_name: servicio-clientes
+    metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["host.docker.internal:8080"]
+      - targets: ["host.docker.internal:8081"]
+
+  - job_name: servicio-inventario
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8082"]
+
+  - job_name: servicio-pedidos
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8083"]

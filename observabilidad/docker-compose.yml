@@ -5,12 +5,10 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-
 
   loki:
     image: grafana/loki:3.0.0
@@ -18,10 +16,7 @@ services:
     ports:
       - "3100:3100"
     command:
-      - config.file=/etc/loki/local-config.yaml
-    volumes:
-      - loki-data:/loki
-
+      - "-config.file=/etc/loki/local-config.yaml"
 
   grafana:
     image: grafana/grafana:11.0.0
@@ -33,16 +28,12 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/dashboards:/etc/grafana/dashboards
       - grafana-data:/var/lib/grafana
     depends_on:
       - loki
       - prometheus
 
-
-
-  volumes:
-    loki-data:
-    prometheus-data:
-    grafana-data:
-
+volumes:
+  prometheus-data:
+  grafana-data:
