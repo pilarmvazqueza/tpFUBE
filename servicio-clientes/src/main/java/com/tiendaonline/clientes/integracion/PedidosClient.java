@@ -2,6 +2,7 @@ package com.tiendaonline.clientes.integracion;
 
 import com.tiendaonline.clientes.dto.PedidoDTO;
 import com.tiendaonline.clientes.excepciones.ServicioNoDisponibleException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,9 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
+
+@Slf4j
 @Component
 public class PedidosClient {
 
@@ -27,6 +31,9 @@ public class PedidosClient {
                     .retrieve()
                     .body(new ParameterizedTypeReference<List<PedidoDTO>>() {});
         } catch (ResourceAccessException | HttpServerErrorException e) {
+            log.error("Servicio remoto no disponible {} {}",
+                    kv("servicio", "servicio-pedidos"),
+                    kv("clienteId", clienteId));
             throw new ServicioNoDisponibleException("servicio-pedidos");
         }
     }

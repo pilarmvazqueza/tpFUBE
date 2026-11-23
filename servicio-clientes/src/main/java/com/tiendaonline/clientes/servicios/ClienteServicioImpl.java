@@ -64,7 +64,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     public ClienteDTO actualizar(Cliente cliente) {
         Cliente clienteViejo = repositorio.findById(cliente.getId())
                 .orElseThrow(() -> {
-                   log.warn("Intento de actualizar cliente intexistente {}",
+                   log.warn("Intento de actualizar cliente inexistente {}",
                            kv("clienteId", cliente.getId()));
                    return new ClienteNoEncontradoException(cliente.getId());
                 });
@@ -80,7 +80,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     @Override
     public void eliminar(Long id) {
         if (!repositorio.existsById(id)) {
-            log.warn("Intento de eliminar cliente inexistente{}", kv("clienteId", id));
+            log.warn("Intento de eliminar cliente inexistente {}", kv("clienteId", id));
             throw new ClienteNoEncontradoException(id);
         }
         repositorio.deleteById(id);

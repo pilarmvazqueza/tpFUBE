@@ -56,7 +56,7 @@ public class PedidoServicioImpl implements PedidoServicio {
 
         Pedido pedido = repositorio.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Pedido no encontrado al intentar cancelar{}", kv("pedidoId", id));
+                    log.warn("Pedido no encontrado al intentar cancelar {}", kv("pedidoId", id));
                     return new PedidoNoEncontradoExcepcion(id);
                 });
 
@@ -87,13 +87,13 @@ public class PedidoServicioImpl implements PedidoServicio {
 
         Pedido pedido = repositorio.findById(id)
                 .orElseThrow(() -> {
-                    log.warn("Pedido no encontrado al intentar confirmar{}",
+                    log.warn("Pedido no encontrado al intentar confirmar {}",
                             kv("pedidoId", id));
                     return new PedidoNoEncontradoExcepcion(id);
                 });
 
         if (pedido.getEstado() != EstadoPedido.CREADO) {
-            log.warn("Pedido no confirmable",
+            log.warn("Pedido no confirmable {} {}",
                     kv("pedidoId", id),
                     kv("estado", pedido.getEstado()));
 

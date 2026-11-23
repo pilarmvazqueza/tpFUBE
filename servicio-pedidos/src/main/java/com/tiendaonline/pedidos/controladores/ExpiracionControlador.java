@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static net.logstash.logback.argument.StructuredArguments.kv;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/pedidos/expiraciones")
@@ -22,9 +24,13 @@ public class ExpiracionControlador {
 
     @PostMapping
     public ResponseEntity<ResumenExpiracionDTO> expirar() {
-        log.info("POST /api/v1/pedidos/expiraciones - Inicio de ejecución de expiraciones");
+        log.info("POST /api/v1/pedidos/expiraciones - Inicio de ejecucion de expiraciones");
         ResumenExpiracionDTO resumen = ejecutor.ejecutar();
-        log.info("POST /api/v1/pedidos/expiraciones - Ejecución finalizada correctamente");
+        if ("COMPLETED".equals(resumen.getEstado())) {
+            log.info("POST /api/v1/pedidos/expiraciones - Ejecucion finalizada {}", kv("estado", resumen.getEstado()));
+        } else {
+            log.warn("POST /api/v1/pedidos/expiraciones - Ejecucion no completada {}", kv("estado", resumen.getEstado()));
+        }
         return new ResponseEntity<>(resumen, HttpStatus.CREATED);
     }
 }
