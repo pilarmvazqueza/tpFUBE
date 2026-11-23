@@ -130,7 +130,7 @@ public class InventarioServicioImpl implements InventarioServicio {
     @Override
     @Transactional
     public void liberarPorPedido(Long pedidoId) {
-        log.info("Iniciando liberación de reservas {}", kv("pedidoId", pedidoId));
+        log.info("Iniciando liberacion de reservas {}", kv("pedidoId", pedidoId));
 
         // Diseño idempotente: solo buscar reservas ACTIVAS
         List<Reserva> reservas = repoReserva.findByPedidoIdAndEstado(pedidoId, EstadoReserva.ACTIVA);

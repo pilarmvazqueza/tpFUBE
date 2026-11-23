@@ -52,7 +52,7 @@ public class PedidoServicioImpl implements PedidoServicio {
     @Override
     @Transactional
     public PedidoDTO cancelar(Long id) {
-        log.debug("Iniciando cancelación de pedido {}", kv("pedidoId", id));
+        log.debug("Iniciando cancelacion de pedido {}", kv("pedidoId", id));
 
         Pedido pedido = repositorio.findById(id)
                 .orElseThrow(() -> {
@@ -83,7 +83,7 @@ public class PedidoServicioImpl implements PedidoServicio {
     @Override
     @Transactional
     public PedidoDTO confirmar(Long id) {
-        log.debug("Iniciando confirmación de pedido {}", kv("pedidoId", id));
+        log.debug("Iniciando confirmacion de pedido {}", kv("pedidoId", id));
 
         Pedido pedido = repositorio.findById(id)
                 .orElseThrow(() -> {
@@ -129,7 +129,7 @@ public class PedidoServicioImpl implements PedidoServicio {
     @Override
     @Transactional
     public PedidoDTO crearPedido(PedidoDTO dto) {
-        log.info("Iniciando creación de pedido {}", kv("clienteId", dto.getClienteId()));
+        log.info("Iniciando creacion de pedido {}", kv("clienteId", dto.getClienteId()));
 
         //verificamos que el cliente exista
         log.debug("Consultando cliente en microservicio Clientes {}",
