@@ -196,17 +196,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });",
-                  "const pedido = pm.response.json();",
-                  "pm.test('es el pedido creado', function () {",
-                  "    pm.expect(String(pedido.id)).to.eql(pm.collectionVariables.get('pedidoId'));",
-                  "    pm.expect(pedido.items).to.have.lengthOf(1);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });\nconst pedido = pm.response.json();\npm.test('es el pedido creado', function () {\n    pm.expect(String(pedido.id)).to.eql(String(pm.collectionVariables.get('pedidoId')));\n    pm.expect(pedido.items).to.have.lengthOf(1);\n});"
+                ]
               }
             }
           ],
@@ -236,12 +229,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });",
-                  "const pedidos = pm.response.json();",
-                  "pm.test('incluye el pedido creado', function () {",
-                  "    const ids = pedidos.map(function (p) { return String(p.id); });",
-                  "    pm.expect(ids).to.include(pm.collectionVariables.get('pedidoId'));",
-                  "});"
+                  "pm.test('200 OK', function () { pm.response.to.have.status(200); });\nconst pedidos = pm.response.json();\npm.test('incluye el pedido creado', function () {\n    const ids = pedidos.map(function (p) { return String(p.id); });\n    pm.expect(ids).to.include(String(pm.collectionVariables.get('pedidoId')));\n});"
                 ]
               }
             }
